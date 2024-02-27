@@ -34,7 +34,7 @@ const Page = async ({searchParams}: {searchParams: {plan: Plan; state: string; c
         <div className='flexJustifyCenter mt-4'>
         <div className='max-w-[850px] border-[1px] p-4 rounded-xl'>
         <h1 className='text-4xl font-bold'>Create an Agency</h1>
-        <AgencyDetails data={{companyEmail:authUser?.emailAddresses[0].emailAddress}} />
+        <AgencyDetails data={{ companyEmail: authUser?.emailAddresses[0].emailAddress }} agencyLogo={undefined} country={undefined} state={undefined} city={undefined} zipCode={undefined} whiteLabel={false} address={undefined} name={undefined} companyPhone={undefined} companyEmail={undefined} />
         </div>
         </div>
     )

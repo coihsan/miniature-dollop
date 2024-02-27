@@ -2,16 +2,27 @@
 import { Agency } from '@prisma/client'
 import { useForm } from 'react-hook-form'
 import React, { useEffect, useState } from 'react'
-import { v4 } from 'uuid'
+// import { v4 } from 'uuid'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AlertDialog } from '../ui/alert-dialog'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
-import { Form, FormField } from '../ui/form'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
 import  * as z  from 'zod'
 import { min } from 'date-fns'
 import { useToast } from '../ui/use-toast'
+import FileUpload from '../global/file-upload'
 type Props = {
+    agencyLogo: string | undefined
+    country: string | undefined
+    state: string | undefined
+    city: string | undefined
+    zipCode: string | undefined
+    whiteLabel: boolean
+    address: string | undefined
+    name: string | undefined
+    companyPhone: string | undefined
+    companyEmail: string | undefined
     data?: Partial<Agency>
 }
 const FormSchema = z.object({
@@ -71,10 +82,15 @@ const AgencyDetails = (data: Props) => {
               disabled={isLoading}
               control={form.control}
               name='whiteLabel'
-              render={({field}) =>{
-
-              }}
-              ></FormField>
+              render={({field}) =>(
+              <FormItem>
+                <FormLabel>Agency Logo</FormLabel>
+                <FormControl>
+                  <FileUpload apiEndpoint='agencylogo' onChange={field.onChange} value={field.value}/>
+                  <FormMessage />
+                </FormControl>
+              </FormItem>
+              )}/>
             </form>
           </Form>
         </CardContent>

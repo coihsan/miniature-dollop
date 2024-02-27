@@ -14,12 +14,12 @@ import {
   Ticket,
   User,
 } from '@prisma/client'
-// import { v4 } from 'uuid'
-// import {
-//   CreateFunnelFormSchema,
-//   CreateMediaType,
-//   UpsertFunnelPage,
-// } from './types'
+import { v4 } from 'uuid'
+import {
+  CreateFunnelFormSchema,
+  CreateMediaType,
+  UpsertFunnelPage,
+} from './types'
 import { z } from 'zod'
 import { revalidatePath } from 'next/cache'
 
@@ -305,85 +305,85 @@ export const getNotificationAndUser = async (agencyId: string) => {
   }
 }
 
-// export const upsertSubAccount = async (subAccount: SubAccount) => {
-//   if (!subAccount.companyEmail) return null
-//   const agencyOwner = await db.user.findFirst({
-//     where: {
-//       Agency: {
-//         id: subAccount.agencyId,
-//       },
-//       role: 'AGENCY_OWNER',
-//     },
-//   })
-//   if (!agencyOwner) return console.log('🔴Erorr could not create subaccount')
-//   const permissionId = v4()
-//   const response = await db.subAccount.upsert({
-//     where: { id: subAccount.id },
-//     update: subAccount,
-//     create: {
-//       ...subAccount,
-//       Permissions: {
-//         create: {
-//           access: true,
-//           email: agencyOwner.email,
-//           id: permissionId,
-//         },
-//         connect: {
-//           subAccountId: subAccount.id,
-//           id: permissionId,
-//         },
-//       },
-//       Pipeline: {
-//         create: { name: 'Lead Cycle' },
-//       },
-//       SidebarOption: {
-//         create: [
-//           {
-//             name: 'Launchpad',
-//             icon: 'clipboardIcon',
-//             link: `/subaccount/${subAccount.id}/launchpad`,
-//           },
-//           {
-//             name: 'Settings',
-//             icon: 'settings',
-//             link: `/subaccount/${subAccount.id}/settings`,
-//           },
-//           {
-//             name: 'Funnels',
-//             icon: 'pipelines',
-//             link: `/subaccount/${subAccount.id}/funnels`,
-//           },
-//           {
-//             name: 'Media',
-//             icon: 'database',
-//             link: `/subaccount/${subAccount.id}/media`,
-//           },
-//           {
-//             name: 'Automations',
-//             icon: 'chip',
-//             link: `/subaccount/${subAccount.id}/automations`,
-//           },
-//           {
-//             name: 'Pipelines',
-//             icon: 'flag',
-//             link: `/subaccount/${subAccount.id}/pipelines`,
-//           },
-//           {
-//             name: 'Contacts',
-//             icon: 'person',
-//             link: `/subaccount/${subAccount.id}/contacts`,
-//           },
-//           {
-//             name: 'Dashboard',
-//             icon: 'category',
-//             link: `/subaccount/${subAccount.id}`,
-//           },
-//         ],
-//       },
-//     },
-//   })
-//   return response
-// }
+export const upsertSubAccount = async (subAccount: SubAccount) => {
+  if (!subAccount.companyEmail) return null
+  const agencyOwner = await db.user.findFirst({
+    where: {
+      Agency: {
+        id: subAccount.agencyId,
+      },
+      role: 'AGENCY_OWNER',
+    },
+  })
+  if (!agencyOwner) return console.log('🔴Erorr could not create subaccount')
+  const permissionId = v4()
+  const response = await db.subAccount.upsert({
+    where: { id: subAccount.id },
+    update: subAccount,
+    create: {
+      ...subAccount,
+      Permissions: {
+        create: {
+          access: true,
+          email: agencyOwner.email,
+          id: permissionId,
+        },
+        connect: {
+          subAccountId: subAccount.id,
+          id: permissionId,
+        },
+      },
+      Pipeline: {
+        create: { name: 'Lead Cycle' },
+      },
+      SidebarOption: {
+        create: [
+          {
+            name: 'Launchpad',
+            icon: 'clipboardIcon',
+            link: `/subaccount/${subAccount.id}/launchpad`,
+          },
+          {
+            name: 'Settings',
+            icon: 'settings',
+            link: `/subaccount/${subAccount.id}/settings`,
+          },
+          {
+            name: 'Funnels',
+            icon: 'pipelines',
+            link: `/subaccount/${subAccount.id}/funnels`,
+          },
+          {
+            name: 'Media',
+            icon: 'database',
+            link: `/subaccount/${subAccount.id}/media`,
+          },
+          {
+            name: 'Automations',
+            icon: 'chip',
+            link: `/subaccount/${subAccount.id}/automations`,
+          },
+          {
+            name: 'Pipelines',
+            icon: 'flag',
+            link: `/subaccount/${subAccount.id}/pipelines`,
+          },
+          {
+            name: 'Contacts',
+            icon: 'person',
+            link: `/subaccount/${subAccount.id}/contacts`,
+          },
+          {
+            name: 'Dashboard',
+            icon: 'category',
+            link: `/subaccount/${subAccount.id}`,
+          },
+        ],
+      },
+    },
+  })
+  return response
+}
 
 export const getUserPermissions = async (userId: string) => {
   const response = await db.user.findUnique({
@@ -506,20 +506,20 @@ export const getMedia = async (subaccountId: string) => {
   return mediafiles
 }
 
-// export const createMedia = async (
-//   subaccountId: string,
-//   mediaFile: CreateMediaType
-// ) => {
-//   const response = await db.media.create({
-//     data: {
-//       link: mediaFile.link,
-//       name: mediaFile.name,
-//       subAccountId: subaccountId,
-//     },
-//   })
+export const createMedia = async (
+  subaccountId: string,
+  mediaFile: CreateMediaType
+) => {
+  const response = await db.media.create({
+    data: {
+      link: mediaFile.link,
+      name: mediaFile.name,
+      subAccountId: subaccountId,
+    },
+  })
 
-//   return response
-// }
+  return response
+}
 
 export const deleteMedia = async (mediaId: string) => {
   const response = await db.media.delete({
@@ -539,57 +539,57 @@ export const getPipelineDetails = async (pipelineId: string) => {
   return response
 }
 
-// export const getLanesWithTicketAndTags = async (pipelineId: string) => {
-//   const response = await db.lane.findMany({
-//     where: {
-//       pipelineId,
-//     },
-//     orderBy: { order: 'asc' },
-//     include: {
-//       Tickets: {
-//         orderBy: {
-//           order: 'asc',
-//         },
-//         include: {
-//           Tags: true,
-//           Assigned: true,
-//           Customer: true,
-//         },
-//       },
-//     },
-//   })
-//   return response
-// }
+export const getLanesWithTicketAndTags = async (pipelineId: string) => {
+  const response = await db.lane.findMany({
+    where: {
+      pipelineId,
+    },
+    orderBy: { order: 'asc' },
+    include: {
+      Tickets: {
+        orderBy: {
+          order: 'asc',
+        },
+        include: {
+          Tags: true,
+          Assigned: true,
+          Customer: true,
+        },
+      },
+    },
+  })
+  return response
+}
 
-// export const upsertFunnel = async (
-//   subaccountId: string,
-//   funnel: z.infer<typeof CreateFunnelFormSchema> & { liveProducts: string },
-//   funnelId: string
-// ) => {
-//   const response = await db.funnel.upsert({
-//     where: { id: funnelId },
-//     update: funnel,
-//     create: {
-//       ...funnel,
-//       id: funnelId || v4(),
-//       subAccountId: subaccountId,
-//     },
-//   })
+export const upsertFunnel = async (
+  subaccountId: string,
+  funnel: z.infer<typeof CreateFunnelFormSchema> & { liveProducts: string },
+  funnelId: string
+) => {
+  const response = await db.funnel.upsert({
+    where: { id: funnelId },
+    update: funnel,
+    create: {
+      ...funnel,
+      id: funnelId || v4(),
+      subAccountId: subaccountId,
+    },
+  })
 
-//   return response
-// }
+  return response
+}
 
-// export const upsertPipeline = async (
-//   pipeline: Prisma.PipelineUncheckedCreateWithoutLaneInput
-// ) => {
-//   const response = await db.pipeline.upsert({
-//     where: { id: pipeline.id || v4() },
-//     update: pipeline,
-//     create: pipeline,
-//   })
+export const upsertPipeline = async (
+  pipeline: Prisma.PipelineUncheckedCreateWithoutLaneInput
+) => {
+  const response = await db.pipeline.upsert({
+    where: { id: pipeline.id || v4() },
+    update: pipeline,
+    create: pipeline,
+  })
 
-//   return response
-// }
+  return response
+}
 
 export const deletePipeline = async (pipelineId: string) => {
   const response = await db.pipeline.delete({
@@ -639,59 +639,59 @@ export const updateTicketsOrder = async (tickets: Ticket[]) => {
   }
 }
 
-// export const upsertLane = async (lane: Prisma.LaneUncheckedCreateInput) => {
-//   let order: number
+export const upsertLane = async (lane: Prisma.LaneUncheckedCreateInput) => {
+  let order: number
 
-//   if (!lane.order) {
-//     const lanes = await db.lane.findMany({
-//       where: {
-//         pipelineId: lane.pipelineId,
-//       },
-//     })
+  if (!lane.order) {
+    const lanes = await db.lane.findMany({
+      where: {
+        pipelineId: lane.pipelineId,
+      },
+    })
 
-//     order = lanes.length
-//   } else {
-//     order = lane.order
-//   }
+    order = lanes.length
+  } else {
+    order = lane.order
+  }
 
-//   const response = await db.lane.upsert({
-//     where: { id: lane.id || v4() },
-//     update: lane,
-//     create: { ...lane, order },
-//   })
+  const response = await db.lane.upsert({
+    where: { id: lane.id || v4() },
+    update: lane,
+    create: { ...lane, order },
+  })
 
-//   return response
-// }
+  return response
+}
 
 export const deleteLane = async (laneId: string) => {
   const resposne = await db.lane.delete({ where: { id: laneId } })
   return resposne
 }
 
-// export const getTicketsWithTags = async (pipelineId: string) => {
-//   const response = await db.ticket.findMany({
-//     where: {
-//       Lane: {
-//         pipelineId,
-//       },
-//     },
-//     include: { Tags: true, Assigned: true, Customer: true },
-//   })
-//   return response
-// }
+export const getTicketsWithTags = async (pipelineId: string) => {
+  const response = await db.ticket.findMany({
+    where: {
+      Lane: {
+        pipelineId,
+      },
+    },
+    include: { Tags: true, Assigned: true, Customer: true },
+  })
+  return response
+}
 
-// export const _getTicketsWithAllRelations = async (laneId: string) => {
-//   const response = await db.ticket.findMany({
-//     where: { laneId: laneId },
-//     include: {
-//       Assigned: true,
-//       Customer: true,
-//       Lane: true,
-//       Tags: true,
-//     },
-//   })
-//   return response
-// }
+export const _getTicketsWithAllRelations = async (laneId: string) => {
+  const response = await db.ticket.findMany({
+    where: { laneId: laneId },
+    include: {
+      Assigned: true,
+      Customer: true,
+      Lane: true,
+      Tags: true,
+    },
+  })
+  return response
+}
 
 export const getSubAccountTeamMembers = async (subaccountId: string) => {
   const subaccountUsersWithAccess = await db.user.findMany({
@@ -726,36 +726,36 @@ export const searchContacts = async (searchTerms: string) => {
   return response
 }
 
-// export const upsertTicket = async (
-//   ticket: Prisma.TicketUncheckedCreateInput,
-//   tags: Tag[]
-// ) => {
-//   let order: number
-//   if (!ticket.order) {
-//     const tickets = await db.ticket.findMany({
-//       where: { laneId: ticket.laneId },
-//     })
-//     order = tickets.length
-//   } else {
-//     order = ticket.order
-//   }
+export const upsertTicket = async (
+  ticket: Prisma.TicketUncheckedCreateInput,
+  tags: Tag[]
+) => {
+  let order: number
+  if (!ticket.order) {
+    const tickets = await db.ticket.findMany({
+      where: { laneId: ticket.laneId },
+    })
+    order = tickets.length
+  } else {
+    order = ticket.order
+  }
 
-//   const response = await db.ticket.upsert({
-//     where: {
-//       id: ticket.id || v4(),
-//     },
-//     update: { ...ticket, Tags: { set: tags } },
-//     create: { ...ticket, Tags: { connect: tags }, order },
-//     include: {
-//       Assigned: true,
-//       Customer: true,
-//       Tags: true,
-//       Lane: true,
-//     },
-//   })
+  const response = await db.ticket.upsert({
+    where: {
+      id: ticket.id || v4(),
+    },
+    update: { ...ticket, Tags: { set: tags } },
+    create: { ...ticket, Tags: { connect: tags }, order },
+    include: {
+      Assigned: true,
+      Customer: true,
+      Tags: true,
+      Lane: true,
+    },
+  })
 
-//   return response
-// }
+  return response
+}
 
 export const deleteTicket = async (ticketId: string) => {
   const response = await db.ticket.delete({
@@ -767,18 +767,18 @@ export const deleteTicket = async (ticketId: string) => {
   return response
 }
 
-// export const upsertTag = async (
-//   subaccountId: string,
-//   tag: Prisma.TagUncheckedCreateInput
-// ) => {
-//   const response = await db.tag.upsert({
-//     where: { id: tag.id || v4(), subAccountId: subaccountId },
-//     update: tag,
-//     create: { ...tag, subAccountId: subaccountId },
-//   })
+export const upsertTag = async (
+  subaccountId: string,
+  tag: Prisma.TagUncheckedCreateInput
+) => {
+  const response = await db.tag.upsert({
+    where: { id: tag.id || v4(), subAccountId: subaccountId },
+    update: tag,
+    create: { ...tag, subAccountId: subaccountId },
+  })
 
-//   return response
-// }
+  return response
+}
 
 export const getTagsForSubaccount = async (subaccountId: string) => {
   const response = await db.subAccount.findUnique({
@@ -793,16 +793,16 @@ export const deleteTag = async (tagId: string) => {
   return response
 }
 
-// export const upsertContact = async (
-//   contact: Prisma.ContactUncheckedCreateInput
-// ) => {
-//   const response = await db.contact.upsert({
-//     where: { id: contact.id || v4() },
-//     update: contact,
-//     create: contact,
-//   })
-//   return response
-// }
+export const upsertContact = async (
+  contact: Prisma.ContactUncheckedCreateInput
+) => {
+  const response = await db.contact.upsert({
+    where: { id: contact.id || v4() },
+    update: contact,
+    create: contact,
+  })
+  return response
+}
 
 export const getFunnels = async (subacountId: string) => {
   const funnels = await db.funnel.findMany({
@@ -839,35 +839,35 @@ export const updateFunnelProducts = async (
   return data
 }
 
-// export const upsertFunnelPage = async (
-//   subaccountId: string,
-//   funnelPage: UpsertFunnelPage,
-//   funnelId: string
-// ) => {
-//   if (!subaccountId || !funnelId) return
-//   const response = await db.funnelPage.upsert({
-//     where: { id: funnelPage.id || '' },
-//     update: { ...funnelPage },
-//     create: {
-//       ...funnelPage,
-//       content: funnelPage.content
-//         ? funnelPage.content
-//         : JSON.stringify([
-//             {
-//               content: [],
-//               id: '__body',
-//               name: 'Body',
-//               styles: { backgroundColor: 'white' },
-//               type: '__body',
-//             },
-//           ]),
-//       funnelId,
-//     },
-//   })
+export const upsertFunnelPage = async (
+  subaccountId: string,
+  funnelPage: UpsertFunnelPage,
+  funnelId: string
+) => {
+  if (!subaccountId || !funnelId) return
+  const response = await db.funnelPage.upsert({
+    where: { id: funnelPage.id || '' },
+    update: { ...funnelPage },
+    create: {
+      ...funnelPage,
+      content: funnelPage.content
+        ? funnelPage.content
+        : JSON.stringify([
+            {
+              content: [],
+              id: '__body',
+              name: 'Body',
+              styles: { backgroundColor: 'white' },
+              type: '__body',
+            },
+          ]),
+      funnelId,
+    },
+  })
 
-//   revalidatePath(`/subaccount/${subaccountId}/funnels/${funnelId}`, 'page')
-//   return response
-// }
+  revalidatePath(`/subaccount/${subaccountId}/funnels/${funnelId}`, 'page')
+  return response
+}
 
 export const deleteFunnelePage = async (funnelPageId: string) => {
   const response = await db.funnelPage.delete({ where: { id: funnelPageId } })
