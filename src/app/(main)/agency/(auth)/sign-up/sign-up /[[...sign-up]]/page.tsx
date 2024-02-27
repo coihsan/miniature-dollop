@@ -1,10 +1,8 @@
-import { SignUp } from "@clerk/nextjs";
-import { dark } from "@clerk/themes";
- 
-export default function Page() {
-  return <SignUp 
-    appearance={{
-      baseTheme: dark
-    }}
-  />;
+import { SignUp } from '@clerk/nextjs'
+import React from 'react'
+
+const Page = () => {
+  return <SignUp />
 }
+
+export default Page

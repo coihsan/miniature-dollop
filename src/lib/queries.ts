@@ -591,53 +591,53 @@ export const getPipelineDetails = async (pipelineId: string) => {
 //   return response
 // }
 
-// export const deletePipeline = async (pipelineId: string) => {
-//   const response = await db.pipeline.delete({
-//     where: { id: pipelineId },
-//   })
-//   return response
-// }
+export const deletePipeline = async (pipelineId: string) => {
+  const response = await db.pipeline.delete({
+    where: { id: pipelineId },
+  })
+  return response
+}
 
-// export const updateLanesOrder = async (lanes: Lane[]) => {
-//   try {
-//     const updateTrans = lanes.map((lane) =>
-//       db.lane.update({
-//         where: {
-//           id: lane.id,
-//         },
-//         data: {
-//           order: lane.order,
-//         },
-//       })
-//     )
+export const updateLanesOrder = async (lanes: Lane[]) => {
+  try {
+    const updateTrans = lanes.map((lane) =>
+      db.lane.update({
+        where: {
+          id: lane.id,
+        },
+        data: {
+          order: lane.order,
+        },
+      })
+    )
 
-//     await db.$transaction(updateTrans)
-//     console.log('🟢 Done reordered 🟢')
-//   } catch (error) {
-//     console.log(error, 'ERROR UPDATE LANES ORDER')
-//   }
-// }
+    await db.$transaction(updateTrans)
+    console.log('🟢 Done reordered 🟢')
+  } catch (error) {
+    console.log(error, 'ERROR UPDATE LANES ORDER')
+  }
+}
 
-// export const updateTicketsOrder = async (tickets: Ticket[]) => {
-//   try {
-//     const updateTrans = tickets.map((ticket) =>
-//       db.ticket.update({
-//         where: {
-//           id: ticket.id,
-//         },
-//         data: {
-//           order: ticket.order,
-//           laneId: ticket.laneId,
-//         },
-//       })
-//     )
+export const updateTicketsOrder = async (tickets: Ticket[]) => {
+  try {
+    const updateTrans = tickets.map((ticket) =>
+      db.ticket.update({
+        where: {
+          id: ticket.id,
+        },
+        data: {
+          order: ticket.order,
+          laneId: ticket.laneId,
+        },
+      })
+    )
 
-//     await db.$transaction(updateTrans)
-//     console.log('🟢 Done reordered 🟢')
-//   } catch (error) {
-//     console.log(error, '🔴 ERROR UPDATE TICKET ORDER')
-//   }
-// }
+    await db.$transaction(updateTrans)
+    console.log('🟢 Done reordered 🟢')
+  } catch (error) {
+    console.log(error, '🔴 ERROR UPDATE TICKET ORDER')
+  }
+}
 
 // export const upsertLane = async (lane: Prisma.LaneUncheckedCreateInput) => {
 //   let order: number
@@ -663,10 +663,10 @@ export const getPipelineDetails = async (pipelineId: string) => {
 //   return response
 // }
 
-// export const deleteLane = async (laneId: string) => {
-//   const resposne = await db.lane.delete({ where: { id: laneId } })
-//   return resposne
-// }
+export const deleteLane = async (laneId: string) => {
+  const resposne = await db.lane.delete({ where: { id: laneId } })
+  return resposne
+}
 
 // export const getTicketsWithTags = async (pipelineId: string) => {
 //   const response = await db.ticket.findMany({
@@ -693,38 +693,38 @@ export const getPipelineDetails = async (pipelineId: string) => {
 //   return response
 // }
 
-// export const getSubAccountTeamMembers = async (subaccountId: string) => {
-//   const subaccountUsersWithAccess = await db.user.findMany({
-//     where: {
-//       Agency: {
-//         SubAccount: {
-//           some: {
-//             id: subaccountId,
-//           },
-//         },
-//       },
-//       role: 'SUBACCOUNT_USER',
-//       Permissions: {
-//         some: {
-//           subAccountId: subaccountId,
-//           access: true,
-//         },
-//       },
-//     },
-//   })
-//   return subaccountUsersWithAccess
-// }
+export const getSubAccountTeamMembers = async (subaccountId: string) => {
+  const subaccountUsersWithAccess = await db.user.findMany({
+    where: {
+      Agency: {
+        SubAccount: {
+          some: {
+            id: subaccountId,
+          },
+        },
+      },
+      role: 'SUBACCOUNT_USER',
+      Permissions: {
+        some: {
+          subAccountId: subaccountId,
+          access: true,
+        },
+      },
+    },
+  })
+  return subaccountUsersWithAccess
+}
 
-// export const searchContacts = async (searchTerms: string) => {
-//   const response = await db.contact.findMany({
-//     where: {
-//       name: {
-//         contains: searchTerms,
-//       },
-//     },
-//   })
-//   return response
-// }
+export const searchContacts = async (searchTerms: string) => {
+  const response = await db.contact.findMany({
+    where: {
+      name: {
+        contains: searchTerms,
+      },
+    },
+  })
+  return response
+}
 
 // export const upsertTicket = async (
 //   ticket: Prisma.TicketUncheckedCreateInput,
@@ -757,15 +757,15 @@ export const getPipelineDetails = async (pipelineId: string) => {
 //   return response
 // }
 
-// export const deleteTicket = async (ticketId: string) => {
-//   const response = await db.ticket.delete({
-//     where: {
-//       id: ticketId,
-//     },
-//   })
+export const deleteTicket = async (ticketId: string) => {
+  const response = await db.ticket.delete({
+    where: {
+      id: ticketId,
+    },
+  })
 
-//   return response
-// }
+  return response
+}
 
 // export const upsertTag = async (
 //   subaccountId: string,
@@ -780,18 +780,18 @@ export const getPipelineDetails = async (pipelineId: string) => {
 //   return response
 // }
 
-// export const getTagsForSubaccount = async (subaccountId: string) => {
-//   const response = await db.subAccount.findUnique({
-//     where: { id: subaccountId },
-//     select: { Tags: true },
-//   })
-//   return response
-// }
+export const getTagsForSubaccount = async (subaccountId: string) => {
+  const response = await db.subAccount.findUnique({
+    where: { id: subaccountId },
+    select: { Tags: true },
+  })
+  return response
+}
 
-// export const deleteTag = async (tagId: string) => {
-//   const response = await db.tag.delete({ where: { id: tagId } })
-//   return response
-// }
+export const deleteTag = async (tagId: string) => {
+  const response = await db.tag.delete({ where: { id: tagId } })
+  return response
+}
 
 // export const upsertContact = async (
 //   contact: Prisma.ContactUncheckedCreateInput
@@ -804,40 +804,40 @@ export const getPipelineDetails = async (pipelineId: string) => {
 //   return response
 // }
 
-// export const getFunnels = async (subacountId: string) => {
-//   const funnels = await db.funnel.findMany({
-//     where: { subAccountId: subacountId },
-//     include: { FunnelPages: true },
-//   })
+export const getFunnels = async (subacountId: string) => {
+  const funnels = await db.funnel.findMany({
+    where: { subAccountId: subacountId },
+    include: { FunnelPages: true },
+  })
 
-//   return funnels
-// }
+  return funnels
+}
 
-// export const getFunnel = async (funnelId: string) => {
-//   const funnel = await db.funnel.findUnique({
-//     where: { id: funnelId },
-//     include: {
-//       FunnelPages: {
-//         orderBy: {
-//           order: 'asc',
-//         },
-//       },
-//     },
-//   })
+export const getFunnel = async (funnelId: string) => {
+  const funnel = await db.funnel.findUnique({
+    where: { id: funnelId },
+    include: {
+      FunnelPages: {
+        orderBy: {
+          order: 'asc',
+        },
+      },
+    },
+  })
 
-//   return funnel
-// }
+  return funnel
+}
 
-// export const updateFunnelProducts = async (
-//   products: string,
-//   funnelId: string
-// ) => {
-//   const data = await db.funnel.update({
-//     where: { id: funnelId },
-//     data: { liveProducts: products },
-//   })
-//   return data
-// }
+export const updateFunnelProducts = async (
+  products: string,
+  funnelId: string
+) => {
+  const data = await db.funnel.update({
+    where: { id: funnelId },
+    data: { liveProducts: products },
+  })
+  return data
+}
 
 // export const upsertFunnelPage = async (
 //   subaccountId: string,
@@ -869,40 +869,40 @@ export const getPipelineDetails = async (pipelineId: string) => {
 //   return response
 // }
 
-// export const deleteFunnelePage = async (funnelPageId: string) => {
-//   const response = await db.funnelPage.delete({ where: { id: funnelPageId } })
+export const deleteFunnelePage = async (funnelPageId: string) => {
+  const response = await db.funnelPage.delete({ where: { id: funnelPageId } })
 
-//   return response
-// }
+  return response
+}
 
-// export const getFunnelPageDetails = async (funnelPageId: string) => {
-//   const response = await db.funnelPage.findUnique({
-//     where: {
-//       id: funnelPageId,
-//     },
-//   })
+export const getFunnelPageDetails = async (funnelPageId: string) => {
+  const response = await db.funnelPage.findUnique({
+    where: {
+      id: funnelPageId,
+    },
+  })
 
-//   return response
-// }
+  return response
+}
 
-// export const getDomainContent = async (subDomainName: string) => {
-//   const response = await db.funnel.findUnique({
-//     where: {
-//       subDomainName,
-//     },
-//     include: { FunnelPages: true },
-//   })
-//   return response
-// }
+export const getDomainContent = async (subDomainName: string) => {
+  const response = await db.funnel.findUnique({
+    where: {
+      subDomainName,
+    },
+    include: { FunnelPages: true },
+  })
+  return response
+}
 
-// export const getPipelines = async (subaccountId: string) => {
-//   const response = await db.pipeline.findMany({
-//     where: { subAccountId: subaccountId },
-//     include: {
-//       Lane: {
-//         include: { Tickets: true },
-//       },
-//     },
-//   })
-//   return response
-// }
+export const getPipelines = async (subaccountId: string) => {
+  const response = await db.pipeline.findMany({
+    where: { subAccountId: subaccountId },
+    include: {
+      Lane: {
+        include: { Tickets: true },
+      },
+    },
+  })
+  return response
+}
