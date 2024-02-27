@@ -11,8 +11,7 @@ generator client {
 
 datasource db {
   provider     = "mongodb"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
+  url          = "mongodb+srv://admin:NaHu2ihRWqpx9eJX@cluster0.ssfyjjr.mongodb.net/"
 }
 
 
@@ -151,7 +150,6 @@ model Tag {
   subAccountId String
 
   SubAccount SubAccount @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
-  Ticket     Ticket[] @relation(fields: [subAccountId], references: [id])
 
   @@index([subAccountId])
 }
@@ -191,8 +189,6 @@ model Ticket {
   Lane        Lane     @relation(fields: [laneId], references: [id], onDelete: Cascade)
   value       Float?
   description String?
-  Tags        Tag[] @relation(fields: [id], references: [id])
-
   customerId String?
   Customer   Contact? @relation(fields: [customerId], references: [id], onDelete: SetNull)
 
