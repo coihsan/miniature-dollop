@@ -1,22 +1,41 @@
 // import AgencyDetails from '@/components/forms/agency-details'
+import AgencyDetails from '@/components/forms/agency-details'
 import { getAuthUserDetails, verifyAndAcceptInvitation } from '@/lib/queries'
-import { currentUser } from '@clerk/nextjs'
+import { currentUser, clerkClient, auth } from '@clerk/nextjs'
 import { Plan } from '@prisma/client'
 import { redirect } from 'next/navigation'
 import React, { use } from 'react'
 
-const Page = async () =>{
-    const authUser = await currentUser()
+const Page = async ({searchParams}: {searchParams: {plan: Plan; state: string; code: string}}) =>{
     const agencyId = await verifyAndAcceptInvitation()
-    const user = getAuthUserDetails()
-    
     console.log(agencyId)
-    if(authUser){
-        if(user?.role === "SUBACCOUT_GUEST" || user.role)
+    const user = await getAuthUserDetails()
+  if (agencyId) {
+    if (user?.role === 'SUBACCOUNT_GUEST' || user?.role === 'SUBACCOUNT_USER') {
+      return redirect('/subaccount')
+    } else if (user?.role === 'AGENCY_OWNER' || user?.role === 'AGENCY_ADMIN') {
+      if (searchParams.plan) {
+        return redirect(`/agency/${agencyId}/billing?plan=${searchParams.plan}`)
+      }
+      if (searchParams.state) {
+        const statePath = searchParams.state.split('___')[0]
+        const stateAgencyId = searchParams.state.split('___')[1]
+        if (!stateAgencyId) return <div>Not authorized</div>
+        return redirect(
+          `/agency/${stateAgencyId}/${statePath}?code=${searchParams.code}`
+        )
+      } else return redirect(`/agency/${agencyId}`)
+    } else {
+      return <div>Not authorized</div>
     }
+  }
+    const authUser = await currentUser()
     return(
-        <div>
-        <h1>Agency</h1>
+        <div className='flexJustifyCenter mt-4'>
+        <div className='max-w-[850px] border-[1px] p-4 rounded-xl'>
+        <h1 className='text-4xl font-bold'>Create an Agency</h1>
+        <AgencyDetails data={{companyEmail:authUser?.emailAddresses[0].emailAddress}} />
+        </div>
         </div>
     )
 }

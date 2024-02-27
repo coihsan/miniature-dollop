@@ -56,9 +56,9 @@ enum Icon {
 }
 
 model User {
-  id           String         @id @default(uuid())
+  id           String         @id @default(uuid()) @map("_id") 
   name         String
-  avatarUrl    String         @db.Text
+  avatarUrl    String         
   email        String         @unique
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
@@ -73,7 +73,7 @@ model User {
 }
 
 model Permissions {
-  id           String     @id @default(uuid())
+  id           String     @id @default(uuid()) @map("_id") @db.ObjectId
   email        String
   User         User       @relation(fields: [email], references: [email], onDelete: Cascade)
   subAccountId String
@@ -85,12 +85,12 @@ model Permissions {
 }
 
 model Agency {
-  id               String                @id @default(uuid())
+  id               String                @id @default(uuid()) @map("_id") @db.ObjectId
   connectAccountId String?               @default("")
   customerId       String                @default("")
   name             String
-  agencyLogo       String                @db.Text
-  companyEmail     String                @db.Text
+  agencyLogo       String                
+  companyEmail     String                
   companyPhone     String
   whiteLabel       Boolean               @default(true)
   address          String
@@ -111,13 +111,13 @@ model Agency {
 }
 
 model SubAccount {
-  id               String                    @id @default(uuid())
+  id               String                    @id @default(uuid()) @map("_id") @db.ObjectId
   connectAccountId String?                   @default("")
   name             String
-  subAccountLogo   String                    @db.Text
+  subAccountLogo   String                    
   createdAt        DateTime                  @default(now())
   updatedAt        DateTime                  @updatedAt
-  companyEmail     String                    @db.Text
+  companyEmail     String                    
   companyPhone     String
   goal             Int                       @default(5)
   address          String
@@ -142,7 +142,7 @@ model SubAccount {
 }
 
 model Tag {
-  id           String   @id @default(uuid())
+  id           String   @id @default(uuid()) @map("_id") @db.ObjectId
   name         String
   color        String
   createdAt    DateTime @default(now())
@@ -150,13 +150,14 @@ model Tag {
   subAccountId String
 
   SubAccount SubAccount @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
-  Ticket     Ticket[]
+  TicketID    String[] @db.ObjectId
+  Ticket      Ticket[] @relation(fields: [TicketID], references: [id])
 
   @@index([subAccountId])
 }
 
 model Pipeline {
-  id           String     @id @default(uuid())
+  id           String     @id @default(uuid()) @map("_id") @db.ObjectId
   name         String
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
@@ -168,7 +169,7 @@ model Pipeline {
 }
 
 model Lane {
-  id         String   @id @default(uuid())
+  id         String   @id @default(uuid()) @map("_id") @db.ObjectId
   name       String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -181,16 +182,17 @@ model Lane {
 }
 
 model Ticket {
-  id          String   @id @default(uuid())
+  id          String   @id @default(uuid()) @map("_id") @db.ObjectId
   name        String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   laneId      String
   order       Int      @default(0)
   Lane        Lane     @relation(fields: [laneId], references: [id], onDelete: Cascade)
-  value       Decimal?
+  value       Float?
   description String?
-  Tags        Tag[]
+  TagsID      String[] @db.ObjectId
+  Tags        Tag[] @relation(fields: [TagsID], references: [id])
 
   customerId String?
   Customer   Contact? @relation(fields: [customerId], references: [id], onDelete: SetNull)
@@ -208,7 +210,7 @@ enum TriggerTypes {
 }
 
 model Trigger {
-  id           String       @id @default(uuid())
+  id           String       @id @default(uuid()) @map("_id") @db.ObjectId
   name         String
   type         TriggerTypes
   createdAt    DateTime     @default(now())
@@ -221,7 +223,7 @@ model Trigger {
 }
 
 model Automation {
-  id                 String               @id @default(uuid())
+  id                 String               @id @default(uuid()) @map("_id") @db.ObjectId
   name               String
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @updatedAt
@@ -238,7 +240,7 @@ model Automation {
 }
 
 model AutomationInstance {
-  id           String     @id @default(uuid())
+  id           String     @id @default(uuid()) @map("_id") @db.ObjectId
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   automationId String
@@ -253,7 +255,7 @@ enum ActionType {
 }
 
 model Action {
-  id           String     @id @default(uuid())
+  id           String     @id @default(uuid()) @map("_id") @db.ObjectId
   name         String
   type         ActionType
   createdAt    DateTime   @default(now())
@@ -267,7 +269,7 @@ model Action {
 }
 
 model Contact {
-  id           String   @id @default(uuid())
+  id           String   @id @default(uuid()) @map("_id") @db.ObjectId
   name         String
   email        String
   createdAt    DateTime @default(now())
@@ -281,7 +283,7 @@ model Contact {
 }
 
 model Media {
-  id           String     @id @default(uuid())
+  id           String     @id @default(uuid()) @map("_id") @db.ObjectId
   type         String?
   name         String
   link         String     @unique
@@ -294,14 +296,14 @@ model Media {
 }
 
 model Funnel {
-  id            String       @id @default(uuid())
+  id            String       @id @default(uuid()) @map("_id") @db.ObjectId
   name          String
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
   description   String?
   published     Boolean      @default(false)
   subDomainName String?      @unique
-  favicon       String?      @db.Text
+  favicon       String?      
   subAccountId  String
   SubAccount    SubAccount   @relation(fields: [subAccountId], references: [id], onDelete: Cascade)
   FunnelPages   FunnelPage[]
@@ -312,28 +314,28 @@ model Funnel {
 }
 
 model ClassName {
-  id         String   @id @default(uuid())
+  id         String   @id @default(uuid()) @map("_id") @db.ObjectId
   name       String
   color      String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   funnelId   String
-  customData String?  @db.LongText
+  customData String? 
   Funnel     Funnel   @relation(fields: [funnelId], references: [id], onDelete: Cascade)
 
   @@index([funnelId])
 }
 
 model FunnelPage {
-  id           String   @id @default(uuid())
+  id           String   @id @default(uuid()) @map("_id") @db.ObjectId
   name         String
   pathName     String   @default("")
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   visits       Int      @default(0)
-  content      String?  @db.LongText
+  content      String? 
   order        Int
-  previewImage String?  @db.Text
+  previewImage String?  
   funnelId     String
   Funnel       Funnel   @relation(fields: [funnelId], references: [id], onDelete: Cascade)
 
@@ -341,7 +343,7 @@ model FunnelPage {
 }
 
 model AgencySidebarOption {
-  id        String   @id @default(uuid())
+  id        String   @id @default(uuid()) @map("_id") @db.ObjectId
   name      String   @default("Menu")
   link      String   @default("#")
   icon      Icon     @default(info)
@@ -354,7 +356,7 @@ model AgencySidebarOption {
 }
 
 model SubAccountSidebarOption {
-  id           String      @id @default(uuid())
+  id           String      @id @default(uuid()) @map("_id") @db.ObjectId
   name         String      @default("Menu")
   link         String      @default("#")
   icon         Icon        @default(info)
@@ -373,7 +375,7 @@ enum InvitationStatus {
 }
 
 model Invitation {
-  id       String           @id @default(uuid())
+  id       String           @id @default(uuid()) @map("_id") @db.ObjectId
   email    String           @unique
   agencyId String
   Agency   Agency           @relation(fields: [agencyId], references: [id], onDelete: Cascade)
@@ -384,7 +386,7 @@ model Invitation {
 }
 
 model Notification {
-  id           String  @id @default(uuid())
+  id           String  @id @default(uuid()) @map("_id") @db.ObjectId
   notification String
   agencyId     String
   subAccountId String?
@@ -408,7 +410,7 @@ enum Plan {
 }
 
 model Subscription {
-  id        String   @id @default(uuid())
+  id        String   @id @default(uuid()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   plan      Plan?
@@ -427,7 +429,7 @@ model Subscription {
 }
 
 model AddOns {
-  id        String   @id @default(uuid())
+  id        String   @id @default(uuid()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name      String
