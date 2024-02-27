@@ -1,14 +1,41 @@
 // import AgencyDetails from '@/components/forms/agency-details'
-// import { getAuthUserDetails, verifyAndAcceptInvitation } from '@/lib/queries'
-import { currentUser } from '@clerk/nextjs'
-// import { Plan } from '@prisma/client'
+import AgencyDetails from '@/components/forms/agency-details'
+import { getAuthUserDetails, verifyAndAcceptInvitation } from '@/lib/queries'
+import { currentUser, clerkClient, auth } from '@clerk/nextjs'
+import { Plan } from '@prisma/client'
 import { redirect } from 'next/navigation'
-import React from 'react'
+import React, { use } from 'react'
 
-const Page = () =>{
+const Page = async ({searchParams}: {searchParams: {plan: Plan; state: string; code: string}}) =>{
+    const agencyId = await verifyAndAcceptInvitation()
+    console.log(agencyId)
+    const user = await getAuthUserDetails()
+  if (agencyId) {
+    if (user?.role === 'SUBACCOUNT_GUEST' || user?.role === 'SUBACCOUNT_USER') {
+      return redirect('/subaccount')
+    } else if (user?.role === 'AGENCY_OWNER' || user?.role === 'AGENCY_ADMIN') {
+      if (searchParams.plan) {
+        return redirect(`/agency/${agencyId}/billing?plan=${searchParams.plan}`)
+      }
+      if (searchParams.state) {
+        const statePath = searchParams.state.split('___')[0]
+        const stateAgencyId = searchParams.state.split('___')[1]
+        if (!stateAgencyId) return <div>Not authorized</div>
+        return redirect(
+          `/agency/${stateAgencyId}/${statePath}?code=${searchParams.code}`
+        )
+      } else return redirect(`/agency/${agencyId}`)
+    } else {
+      return <div>Not authorized</div>
+    }
+  }
+    const authUser = await currentUser()
     return(
-        <div>
-        <h1>Agency</h1>
+        <div className='flexJustifyCenter mt-4'>
+        <div className='max-w-[850px] border-[1px] p-4 rounded-xl'>
+        <h1 className='text-4xl font-bold'>Create an Agency</h1>
+        <AgencyDetails data={{ companyEmail: authUser?.emailAddresses[0].emailAddress }} agencyLogo={undefined} country={undefined} state={undefined} city={undefined} zipCode={undefined} whiteLabel={false} address={undefined} name={undefined} companyPhone={undefined} companyEmail={undefined} />
+        </div>
         </div>
     )
 }
